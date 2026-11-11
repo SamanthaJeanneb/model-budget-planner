@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-geist-mono);
+
+  /* Warm neutrals: the canvas the sidebar sits on, the white working surface, a subtle fill */
+  --color-canvas: #f3f2f0;
+  --color-surface: #ffffff;
+  --color-subtle: #faf9f7;
+  --color-ink: #1a1a1a;
+  --color-ink-2: #5c5a57;
+  --color-ink-3: #9a9792;
+  --color-line: #e8e6e3;
+  --color-line-soft: #f0eeeb;
+
+  /* The one accent (indigo): selected state */
+  --color-accent: #5e5ce6;
+  --color-accent-strong: #4846c4;
+  --color-accent-soft: #efeffd;
+  /* Open weights in charts, against the indigo of closed models */
+  --color-open: #eb6834;
+
+  --color-warn: #a35f00;
+  --color-bad: #b42318;
+
+  /* Task types: validated categorical order */
+  --color-t-planning: #6250d6;
+  --color-t-coding: #eb6834;
+  --color-t-ui: #1baf7a;
+  --color-t-tests: #eda100;
+  --color-t-review: #e87ba4;
+  --color-t-docs: #008300;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-feature-settings: "cv11", "ss01";
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-accent-soft);
+}
