@@ -24,12 +24,16 @@ So I built this. Based on public benchmarks and real cost data, you plan a proje
 - Set your budget with the slider. If the best stack costs less than your budget, it doesn't spend the rest
 - Swap or lock a model on any task and everything else rebalances to the money that's left
 - Requirements: open weights only, zero data retention, fastest models, min context, exclude labs, and a minimum score per task type
-- Benchmarks tab and New models tab, with your stack highlighted and new models you can add to it
+- Benchmarks tab to see the landscape of all model benchmarks, with your stack highlighted
+- News tab to see new model releases and add them to your stack
+- Hover over the New badge to see what's new about a model compared to that provider's last one
 - Export to Claude Code, Cline, or OpenCode so your agent uses the right model for each task
 
 For example, a habit tracker in Next.js and Postgres: the best stack is $48, at a $20 budget it's $18, and with open weights only it's $3.76.
 
 ![Why this model](docs/why-this-model.png)
+
+![Benchmarks](docs/benchmarks.png)
 
 ## Why I built it this way
 
@@ -61,7 +65,7 @@ All from OpenRouter:
 - **Models API:** prices, release dates, context length, open weights, zero data retention. This is the planning dropdown, the New tags, the requirements, and the New models tab
 - **Benchmarks API:** Artificial Analysis intelligence, coding, and agentic scores. This is how each task picks its model, and the Benchmarks tab
 - **Datasets API (session cost):** the real median cost of Claude Code sessions per model. I used this for the cost estimate instead of guessing tokens, since most of what an agent costs is re-reading context and retrying
-- **Classifications API:** what models people actually use for each kind of task, shown when you hover a new model
+- **Classifications API:** what each model is most used for, shown when you hover the New badge
 - **Chat Completions:** makes the plan, with structured JSON output and streaming
 
 ## Technical choices
