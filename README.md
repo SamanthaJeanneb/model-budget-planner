@@ -1,73 +1,83 @@
 # Model Budget Planner
 
-What can you build with $5? Describe a project, set a budget, and see which AI model should do each part of it before you spend anything.
+Plan a project, set a budget, and see which AI models to use for each part of it.
 
-**Try it:** https://model-budget-planner.vercel.app
+Try it: https://model-budget-planner.vercel.app
 
-![A habit tracker plan at a $20 budget](docs/plan.png)
+![Plan for a habit tracker at a $20 budget](docs/plan.png)
 
 ## The pain
 
-The #1 complaint from me and other developers building with AI lately: it's just gotten too expensive. Online it's videos of Claude limits running out after one prompt, and jokes about taking out a loan to make a 3D model with GPT Astra.
+The #1 complaint me and other developers who build with AI have had lately: it's just gotten too expensive. You see videos of Claude limits being used up after one prompt, and jokes about taking out a loan just to make a 3D model with GPT Astra.
 
-Only a small part of the AI-native crowd knows how to offset costs, or which open-weight models are just as good as closed ones. Keeping up is basically a full-time job. New models and new benchmarks drop every week, and it's hard to tell what's good even in the mainstream, let alone open-weight models and labs outside the US. Most people also don't know which models keep their data.
+Only a small part of the AI native crowd knows how to offset costs, or which open-weight models are just as good as closed source ones. Keeping up with AI is practically a full time job. New models, new benchmarks, it's hard to keep up with what's performing well even in the mainstream, let alone open-weight models and labs outside the US. A lot of builders also don't know which models keep their data, or what performs best for each task.
 
-So people default to the most expensive model for everything. I did this myself. I accidentally spent hundreds on coding agents because I thought I needed Fable to get a good outcome, when lighter models could have handled most of the work. Writing a migration doesn't need the same reasoning as designing the architecture.
+I faced this problem myself. I accidentally spent hundreds on coding agents because I thought I needed Fable to have a good outcome on my projects, when I could have been using lighter models for tasks that don't need heavy reasoning.
 
-## What it does
+So I built this. Based on public benchmarks and real cost data, you plan a project, then budget the AI spend to build it with the top performing models for each part.
 
-You describe what you're building and pick a planning model. The dropdown is ranked by intelligence score with the price next to each. It writes an approach and breaks the project into phases and tasks, each labeled planning, coding, UI, tests, review, or docs, and sized small, medium, or large.
+## How it works
 
-Then every task gets the best model your budget can afford. Click "Why this model" on any task to see the score it was picked on, what the top model would add and cost, the runner-up, and the math behind the cost.
+- Describe what you're building and pick which model plans it (ranked by intelligence score, with prices)
+- It breaks the project into phases and tasks (planning, coding, UI, tests, review, docs) and sizes each one
+- Each task gets the best model your budget can afford. "Why this model" shows the score, the runner up, and how the cost was estimated
+- Set your budget with the slider. If the best stack costs less than your budget, it doesn't spend the rest
+- Swap or lock a model on any task and everything else rebalances to the money that's left
+- Requirements: open weights only, zero data retention, fastest models, min context, exclude labs, and a minimum score per task type
+- Benchmarks tab and New models tab, with your stack highlighted and new models you can add to it
+- Export to Claude Code, Cline, or OpenCode so your agent uses the right model for each task
+
+For example, a habit tracker in Next.js and Postgres: the best stack is $48, at a $20 budget it's $18, and with open weights only it's $3.76.
 
 ![Why this model](docs/why-this-model.png)
 
-Here's what that looks like on a habit tracker in Next.js and Postgres. The best possible stack costs $48. At a $20 budget it comes out to $18: Fable keeps planning, setup, tests, and review, and GPT-5.6 Sol and Gemini 3.7 Flash take the rest. Sol scores 78 on coding next to Fable 5.1's 81, for $0.81 a task instead of $3.65. Turn on "open weights only" and the whole thing is $3.76 with GLM 5.3 and Kimi K3.1 Pro.
+## Why I built it this way
 
-Everything else you can do:
+I wanted to see the whole plan and what it costs before spending anything, and make the calls myself. OpenRouter already has Auto Code, which picks models for you while you work, so I didn't build a router.
 
-- **Budget:** drag the slider or pick a preset. It shows what the best stack would cost, and if your budget is higher than that, the extra stays unspent
-- **Edit the plan:** rename phases, add, remove, or reorder tasks, change a task's type or size
-- **Swap or lock a model** on any task, including planning, and every other task rebalances to what's left
-- **Requirements:** open weights only, zero data retention, fastest models only, minimum context, exclude labs (there's a Chinese labs preset), and a minimum score per task type. Each one shows what it adds or saves
-- **Benchmarks tab:** intelligence, coding, and agentic scores against price, with the best-value models traced and your stack highlighted
-- **New models tab:** what came out recently, with "New" tags and an RSS feed. Add one to your stack in one click
-- **Export** to Claude Code (a helper agent per task type, each set to its model), Cline (Plan and Act models), or OpenCode
+What I didn't build:
 
-![Benchmarks](docs/benchmarks.png)
+- A router, Auto Code already does that
+- Running the tasks, your coding agent does that
+- Setting the spending cap in the app. It needs a management key, so the export gives you the command instead
+- Accounts and saved plans. You use this at the start of a project and then you're done with it
 
-## Why this approach
+How I structured it:
 
-OpenRouter already tells you what's new and what's good, and Auto Code picks a model for each request while you work. What I couldn't find was a way to see the whole plan and what it'll cost before I start, and make the calls myself. That's the gap this fills.
+- Three layers: domain, server, UI. All the money and model picking logic lives in `domain/` as pure functions with tests, so I could trust the numbers and change the UI without breaking them
+- Only the server talks to OpenRouter. The API key never gets to the browser, and every response gets turned into my own types in one file (`server/openrouter.ts`)
+- The plan is one piece of state. The stack isn't stored anywhere, it's recalculated from the plan every time you move the slider or swap a model, so it can't get out of sync
+- The UI is based on Ramp's dashboard, just type, tables, and numbers. I didn't want it to look like a template
 
-What I didn't build, and why:
+## Skills I used
 
-- **A router that switches models while you work.** Auto Code already does this well. I wanted the decisions out in the open before any money is spent
-- **Running the tasks.** Your coding agent is better at that. This hands it a plan and the right models
-- **Setting the spending cap from the app.** That needs an OpenRouter management key, so the export gives you the one command to do it yourself
-- **Accounts and saved plans.** Not worth the time for something you use at the start of a project
+- My react-composition skill from my [sjb-stack](https://github.com/SamanthaJeanneb/sjb-stack) repo, based on Fernando Rojo's "Composition Is All You Need" talk. It's in `.claude/skills` so my coding agent follows it while building. It's why the three exports are separate components instead of one component with an `agent="cline"` prop
+- Next.js 16, React 19, TypeScript, Tailwind, Radix, Motion, Zod to check API responses, and Vitest
+
+## APIs I used and why
+
+All from OpenRouter:
+
+- **Models API:** prices, release dates, context length, open weights, zero data retention. This is the planning dropdown, the New tags, the requirements, and the New models tab
+- **Benchmarks API:** Artificial Analysis intelligence, coding, and agentic scores. This is how each task picks its model, and the Benchmarks tab
+- **Datasets API (session cost):** the real median cost of Claude Code sessions per model. I used this for the cost estimate instead of guessing tokens, since most of what an agent costs is re-reading context and retrying
+- **Classifications API:** what models people actually use for each kind of task, shown when you hover a new model
+- **Chat Completions:** makes the plan, with structured JSON output and streaming
 
 ## Technical choices
 
-**Model selection.** Each task type is scored on the Artificial Analysis index that fits it: coding for coding and UI, agentic for tests, intelligence for planning, review, and docs. If a model doesn't have that score, it falls back to intelligence. To split the budget, every task starts on its cheapest option, then it keeps buying the upgrade that adds the most points per dollar until nothing else fits. That way the money goes where it actually makes a difference. It's one pure function with tests, and it reruns on every change.
-
-**Cost.** Token guesses would be made up, since most of an agent's spend is re-reading context and retrying. So each task size maps to OpenRouter's real median cost for a Claude Code session of that length on that model, from typical to worst case.
-
-**Routing.** Nothing at runtime. The export writes each task's model into your coding agent's config, and OpenRouter handles the requests from there.
-
-**Fallbacks.** The plan is the first thing you see, so if the planning model is down the whole app feels broken. The request sends your pick plus the next two in the ranking, and OpenRouter falls back to them.
-
-**Streaming.** Planning with a strong model takes a bit. The plan streams back as structured JSON and each task shows up the moment it's finished, so you're watching it build instead of a spinner.
-
-**Data.** Models, benchmarks, task popularity, and session costs all come from the OpenRouter API, get parsed in one server file, and are cached for an hour. The API key never touches the browser.
+- **Model selection:** each task type uses the score that fits it. Coding for coding and UI, agentic for tests, intelligence for planning, review, and docs. If a model doesn't have that score it falls back to intelligence. Every task starts on the cheapest option, then it keeps upgrading wherever it gets the most points per dollar until the budget runs out
+- **Routing:** nothing routes while it runs. The export puts each task's model in your coding agent's config
+- **Fallbacks:** the plan request sends the model you picked plus the next two, so if one is down the plan still comes back
+- **Streaming:** tasks show up one at a time as the plan is written, instead of waiting on a spinner
 
 ## Learnings
 
-- **I expected cost data for every coding agent.** OpenRouter only publishes it for a few (Claude Code, Codex, Hermes, Kilo Code), and only 44 models have Claude Code numbers. Everything else gets estimated from the closest-priced model that has data, and the app labels it "estimated"
-- **I expected a range.** The data only gives a median per session length, so "worst case" uses the median of the next length up
-- **Scores have holes.** Only 57 models have an intelligence score, 152 have coding, and 108 have agentic. A task falls back to intelligence when its own score is missing, and the planning dropdown only shows models that have one
-- **I couldn't set the budget for you.** That needs a management key, which a normal API key isn't. The export shows the command instead
-- **Claude Code only has 4 model levels** in its settings, so the export also writes a helper agent file for each task type with its own model
+- Session cost data only exists for a few coding agents and 44 models, so everything else is estimated off the closest priced model and labeled "estimated"
+- There are no percentiles, just medians, so worst case uses the median of the next session length up
+- A lot of models are missing scores, so tasks fall back to intelligence, and the planning dropdown only shows models that have one
+- My key isn't a management key, so the app can't set your budget. The export gives you the command
+- Claude Code only has 4 model levels, so the export makes a helper agent for each task type with its own model
 
 ## Run it locally
 
