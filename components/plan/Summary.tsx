@@ -12,7 +12,7 @@ function Figure({ label, children, tone = "" }: { label: string; children: React
       <dd className={`text-[26px] leading-tight font-medium tracking-tight tabular-nums ${tone}`}>
         {children}
       </dd>
-      <dt className="mt-0.5 text-xs text-ink-3">{label}</dt>
+      <dt className="mt-0.5 text-[13px] text-ink-2">{label}</dt>
     </div>
   );
 }

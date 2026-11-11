@@ -16,11 +16,11 @@ export function Project() {
   return (
     <div className="flex items-start gap-4">
       <div className="min-w-0 flex-1">
-        <p className="mb-1 text-xs text-ink-3">
+        <p className="mb-1.5 text-[14px] text-ink-2">
           {state.status === "planning" ? "Planning with" : "Planned by"}{" "}
           {planner ? shortName(planner.name) : "the planning model"}
         </p>
-        <h1 className="line-clamp-2 text-xl font-semibold tracking-tight">
+        <h1 className="text-xl font-semibold tracking-tight">
           {state.brief || "Untitled project"}
         </h1>
       </div>

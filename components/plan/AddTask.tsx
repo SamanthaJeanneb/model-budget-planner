@@ -26,13 +26,13 @@ export function AddTask({ phase }: { phase: string }) {
         add();
       }}
     >
-      <Plus className="size-4 text-ink-3" />
+      <Plus className="size-4 text-ink-2" />
       <input
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         placeholder={`Add a task to ${phase}`}
         aria-label={`New task in ${phase}`}
-        className="h-8 min-w-48 flex-1 bg-transparent text-[13px] outline-none placeholder:text-ink-3"
+        className="h-8 min-w-48 flex-1 bg-transparent text-[14px] outline-none placeholder:text-ink-2"
       />
       {title ? (
         <>

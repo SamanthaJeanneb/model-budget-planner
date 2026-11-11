@@ -59,7 +59,7 @@ export function TaskDetail({ row }: { row: TaskResult }) {
     );
   }
   return (
-    <div className="mx-4 mb-4 grid gap-6 rounded-lg bg-subtle p-4 text-[13px] ring-1 ring-line-soft md:grid-cols-2">
+    <div className="mx-4 mb-4 grid gap-6 rounded-lg bg-subtle p-4 text-[14px] ring-1 ring-line-soft md:grid-cols-2">
       <div className="space-y-3">
         <Why row={row} />
       </div>
@@ -70,13 +70,13 @@ export function TaskDetail({ row }: { row: TaskResult }) {
           <dt className="text-ink-2">Worst case</dt>
           <dd className="text-right tabular-nums">
             {formatMoney(pick.cost.worst)}
-            {pick.cost.worstIsRuleOfThumb ? <span className="text-ink-3"> (2 × the 50+ median)</span> : null}
+            {pick.cost.worstIsRuleOfThumb ? <span className="text-ink-2"> (2 × the 50+ median)</span> : null}
           </dd>
         </dl>
         <p className="rounded-lg bg-surface px-3 py-2 font-mono text-xs leading-relaxed text-ink-2 ring-1 ring-line-soft">
           {pick.cost.math}
         </p>
-        <p className="text-xs text-ink-3">{SOURCE_TEXT[pick.cost.source]}</p>
+        <p className="text-[13px] text-ink-2">{SOURCE_TEXT[pick.cost.source]}</p>
       </div>
     </div>
   );

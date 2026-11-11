@@ -1,7 +1,6 @@
 "use client";
 
-import { TASK_SCORE, TASK_TYPES } from "@/domain/rules";
-import { meetsModelRequirements } from "@/domain/score";
+import { TASK_TYPES } from "@/domain/rules";
 import { Requirement } from "../requirements";
 import { Switch } from "../ui/Switch";
 import { usePlan } from "./context";
@@ -14,16 +13,12 @@ export function Requirements() {
   const p = state.prices;
   const set = actions.setRequirements;
   const models = meta.catalog.models;
-  const allowed = models.filter((m) => meetsModelRequirements(m, r)).length;
   const labs = [...new Set(models.map((m) => m.lab))].sort();
   const types = TASK_TYPES.filter((t) => state.tasks.some((task) => task.type === t));
   return (
     <section>
       <div className="mb-2 flex items-baseline justify-between">
         <h2 className="text-[13px] font-semibold">Requirements</h2>
-        <span className="text-xs text-ink-3 tabular-nums">
-          {allowed} of {models.length} models
-        </span>
       </div>
       <Requirement.Row price={p.openWeightsOnly}>
         <Switch checked={r.openWeightsOnly} onCheckedChange={(v) => set({ openWeightsOnly: v })}>
@@ -57,10 +52,7 @@ export function Requirements() {
             value={r.minScore[type]}
             onChange={(v) => set({ minScore: { ...r.minScore, [type]: v } })}
           >
-            <span className="flex flex-col">
-              <TypeLabel type={type} />
-              <span className="pl-3.5 text-xs text-ink-3 capitalize">{TASK_SCORE[type]}</span>
-            </span>
+            <TypeLabel type={type} />
           </Requirement.MinScore>
         </Requirement.Row>
       ))}

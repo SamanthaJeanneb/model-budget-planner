@@ -34,12 +34,7 @@ export function Picker({ options, current, chosen, onChange }: Props) {
       placeholder="Search models"
       className="w-full"
       width="w-[26rem]"
-      display={
-        <span className="flex items-center gap-2">
-          {shortName(current.model.name)}
-          <span className="text-ink-3">{chosen ? "Your pick" : "Best for budget"}</span>
-        </span>
-      }
+      display={<span className="truncate">{shortName(current.model.name)}</span>}
     >
       <ComboboxItem
         value="auto"
