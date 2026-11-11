@@ -6,9 +6,11 @@ Try it: https://model-budget-planner.vercel.app
 
 ![Plan](docs/plan.png)
 
-The #1 complaint me and other developers who build with AI have had lately is that it's just gotten too expensive. Online it's videos of Claude limits being used up after one prompt, and jokes about taking out a loan just to make a 3D model with GPT Astra. I faced this myself. I accidentally spent hundreds on coding agents because I thought I needed Fable to have a good outcome on my projects, when I could have been using lighter models for the tasks that don't need heavy reasoning.
+The #1 complaint me and other developers who build with AI have had lately is that it's just gotten too expensive. Online it's videos of Claude limits being used up after one prompt, and jokes about taking out a loan just to make a 3D model with GPT Astra. I faced this myself. 
 
 Cheaper models are out there, but keeping up with AI is practically a full time job. New models and benchmarks come out every week, and only a small part of the AI native crowd knows which open-weight models are as good as closed source ones, which ones keep your data, or what's best for each kind of task. Everyone else just uses the most expensive model for everything.
+
+I have spent hundreds on AI costs when I could have been using more open-weight models, And this is a common problem amongst developers, mostly due to misinformation. This tool is meant help to solve this. 
 
 So I built a planner that does that for you. You describe what you're building and set a budget, and a planning model breaks it into tasks: planning, coding, UI, tests, review, docs. Each task gets the best model your budget can afford, and "Why this model" shows the score it was picked on, the runner up, and how the cost was estimated. If the best stack costs less than your budget, it doesn't spend the rest. You can swap or lock any model and the rest rebalance, and set requirements like open weights only or zero data retention.
 
